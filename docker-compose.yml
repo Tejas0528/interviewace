@@ -1,0 +1,33 @@
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite+aiosqlite:///./interviewace.db
+      - SECRET_KEY=${SECRET_KEY:-mysecretkey123456789012345678901}
+      - GOOGLE_API_KEY=${GOOGLE_API_KEY:-}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - DEBUG=false
+    volumes:
+      - ./backend/data:/app/data
+      - uploads_data:/tmp/uploads
+    mem_limit: 512m
+    memswap_limit: 512m
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    mem_limit: 256m
+
+volumes:
+  uploads_data:

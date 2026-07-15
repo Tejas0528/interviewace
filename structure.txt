@@ -1,0 +1,111 @@
+interviewace/
+├── frontend/
+│   ├── public/
+│   ├── src/
+│   │   ├── api/
+│   │   │   ├── auth.ts
+│   │   │   ├── resume.ts
+│   │   │   ├── interview.ts
+│   │   │   ├── analytics.ts
+│   │   │   └── client.ts
+│   │   ├── components/
+│   │   │   ├── ui/
+│   │   │   ├── layout/
+│   │   │   │   ├── Sidebar.tsx
+│   │   │   │   ├── Navbar.tsx
+│   │   │   │   └── Layout.tsx
+│   │   │   ├── dashboard/
+│   │   │   │   ├── ScoreCard.tsx
+│   │   │   │   ├── AgentStatus.tsx
+│   │   │   │   └── ProgressRing.tsx
+│   │   │   ├── resume/
+│   │   │   │   ├── ResumeUpload.tsx
+│   │   │   │   ├── ResumeScore.tsx
+│   │   │   │   └── ATSReport.tsx
+│   │   │   ├── interview/
+│   │   │   │   ├── MockInterview.tsx
+│   │   │   │   ├── QuestionCard.tsx
+│   │   │   │   └── AnswerInput.tsx
+│   │   │   └── shared/
+│   │   │       ├── LoadingSkeleton.tsx
+│   │   │       └── Toast.tsx
+│   │   ├── pages/
+│   │   │   ├── auth/
+│   │   │   │   ├── Login.tsx
+│   │   │   │   ├── Signup.tsx
+│   │   │   │   └── ForgotPassword.tsx
+│   │   │   ├── Dashboard.tsx
+│   │   │   ├── Resume.tsx
+│   │   │   ├── Interview.tsx
+│   │   │   ├── MockInterview.tsx
+│   │   │   ├── Learning.tsx
+│   │   │   ├── Company.tsx
+│   │   │   ├── Analytics.tsx
+│   │   │   ├── Career.tsx
+│   │   │   └── Reports.tsx
+│   │   ├── hooks/
+│   │   │   ├── useAuth.ts
+│   │   │   ├── useResume.ts
+│   │   │   └── useInterview.ts
+│   │   ├── stores/
+│   │   │   ├── authStore.ts
+│   │   │   └── interviewStore.ts
+│   │   ├── types/
+│   │   │   └── index.ts
+│   │   ├── utils/
+│   │   │   └── helpers.ts
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   ├── package.json
+│   ├── tsconfig.json
+│   ├── vite.config.ts
+│   └── tailwind.config.js
+├── backend/
+│   ├── app/
+│   │   ├── api/
+│   │   │   ├── v1/
+│   │   │   │   ├── auth.py
+│   │   │   │   ├── resume.py
+│   │   │   │   ├── interview.py
+│   │   │   │   ├── analytics.py
+│   │   │   │   ├── career.py
+│   │   │   │   └── reports.py
+│   │   │   └── deps.py
+│   │   ├── agents/
+│   │   │   ├── planner.py
+│   │   │   ├── resume_analyzer.py
+│   │   │   ├── resume_scorer.py
+│   │   │   ├── ats_analyzer.py
+│   │   │   ├── resume_builder.py
+│   │   │   ├── interview_coach.py
+│   │   │   ├── mock_interviewer.py
+│   │   │   ├── feedback_agent.py
+│   │   │   ├── career_coach.py
+│   │   │   └── report_generator.py
+│   │   ├── graph/
+│   │   │   ├── workflow.py
+│   │   │   └── state.py
+│   │   ├── rag/
+│   │   │   ├── loader.py
+│   │   │   ├── embeddings.py
+│   │   │   ├── retriever.py
+│   │   │   └── knowledge_base.py
+│   │   ├── models/
+│   │   │   └── db_models.py
+│   │   ├── schemas/
+│   │   │   └── schemas.py
+│   │   ├── services/
+│   │   │   ├── auth_service.py
+│   │   │   ├── resume_service.py
+│   │   │   └── interview_service.py
+│   │   ├── core/
+│   │   │   ├── config.py
+│   │   │   ├── security.py
+│   │   │   └── database.py
+│   │   └── main.py
+│   ├── alembic/
+│   ├── requirements.txt
+│   └── Dockerfile
+├── docker-compose.yml
+├── nginx.conf
+└── README.md
