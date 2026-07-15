@@ -19,7 +19,11 @@ export function useWebSocket(sessionId: string | null) {
   const connect = useCallback(() => {
     if (!sessionId || wsRef.current?.readyState === WebSocket.OPEN) return
 
-    const wsUrl = `${(import.meta as any).env?.VITE_WS_URL || 'ws://localhost:8000'}/ws/${sessionId}`
+    const WS_BASE =
+  (import.meta as any).env?.VITE_WS_URL ||
+  'wss://interviewace-tkd8.onrender.com'
+
+const wsUrl = `${WS_BASE}/ws/${sessionId}`
     const ws = new WebSocket(wsUrl)
 
     ws.onopen = () => {

@@ -1,6 +1,7 @@
-import axios from 'axios'
-
-const API_BASE = (import.meta as any).env?.VITE_API_URL || 'http://localhost:8000'
+  import axios from 'axios'
+const API_BASE =
+  (import.meta as any).env?.VITE_API_URL ||
+  'https://interviewace-tkd8.onrender.com'
 
 export const apiClient = axios.create({
   baseURL: `${API_BASE}/api/v1`,
