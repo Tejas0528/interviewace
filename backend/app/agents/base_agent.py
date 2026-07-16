@@ -15,7 +15,7 @@ class BaseAgent:
                 try:
                     from langchain_google_genai import ChatGoogleGenerativeAI
                     self._llm = ChatGoogleGenerativeAI(
-                        model="gemini-1.5-flash",
+                        model="gemini-2.5-flash",
                         google_api_key=settings.GOOGLE_API_KEY.strip(),
                         temperature=0.7,
                     )
