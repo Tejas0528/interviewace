@@ -55,21 +55,61 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
         raise HTTPException(status_code=422, 
             detail="Could not extract text from file. Please ensure it's a valid PDF or DOCX with readable text.")
 
+@router.post("/upload", response_model=ResumeResponse)
+async def upload_resume(
+    file: UploadFile = File(...),
+    db: AsyncSession = Depends(get_db),
+    user: User = Depends(get_current_user),
+):
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="No file provided")
+
+    ext = file.filename.split(".")[-1].lower()
+    if ext not in ["pdf", "doc", "docx"]:
+        raise HTTPException(
+            status_code=400,
+            detail="Only PDF and Word documents are supported",
+        )
+
+    os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
+    file_path = os.path.join(settings.UPLOAD_DIR, f"{user.id}_{file.filename}")
+
+    async with aiofiles.open(file_path, "wb") as f:
+        content = await file.read()
+        await f.write(content)
+
+    text_content = await extract_text(file_path, file.content_type or "")
+
+    if not text_content.strip():
+        raise HTTPException(
+            status_code=422,
+            detail="Could not extract text from file. Please ensure it's a valid PDF or DOCX with readable text."
+        )
+
     from app.agents.resume_analyzer import ResumeAnalyzerAgent
 
-parsed = {}
-
-try:
-    analyzer = ResumeAnalyzerAgent()
-    parsed = await analyzer.parse(text_content)
-except Exception as e:
-    print("Resume parsing failed:", e)
     parsed = {}
 
+    try:
+        analyzer = ResumeAnalyzerAgent()
+        parsed = await analyzer.parse(text_content)
+    except Exception as e:
+        print(f"Resume parsing failed: {e}")
+        parsed = {}
+
     resume = Resume(
-        user_id=user.id, filename=file.filename, file_path=file_path,
-        content=text_content, parsed_data=parsed,
+        user_id=user.id,
+        filename=file.filename,
+        file_path=file_path,
+        content=text_content,
+        parsed_data=parsed,
     )
+
+    db.add(resume)
+    await db.commit()
+    await db.refresh(resume)
+
+    return resume
     db.add(resume)
     await db.commit()
     await db.refresh(resume)
