@@ -25,28 +25,27 @@ class BaseAgent:
                 print("[BaseAgent] WARNING: GOOGLE_API_KEY not set — AI features disabled, using fallbacks")
         return self._llm
 
-    async def invoke(self, system_prompt: str, user_message: str) -> str:
+async def invoke(self, system_prompt: str, user_message: str) -> str:
         llm = self._get_llm()
         if not llm:
             return "{}"
+
         try:
             from langchain_core.messages import HumanMessage, SystemMessage
+            import asyncio
+
             messages = [
                 SystemMessage(content=system_prompt),
                 HumanMessage(content=user_message),
             ]
-            import asyncio
 
-try:
-    response = await asyncio.wait_for(
-        llm.ainvoke(messages),
-        timeout=15
-    )
-    return response.content
-except Exception as e:
-    print(f"[BaseAgent] LLM invoke error: {e}")
-    return "{}"
+            response = await asyncio.wait_for(
+                llm.ainvoke(messages),
+                timeout=15,
+            )
+
             return response.content
+
         except Exception as e:
             print(f"[BaseAgent] LLM invoke error: {e}")
             return "{}"
