@@ -56,8 +56,15 @@ async def upload_resume(file: UploadFile = File(...), db: AsyncSession = Depends
             detail="Could not extract text from file. Please ensure it's a valid PDF or DOCX with readable text.")
 
     from app.agents.resume_analyzer import ResumeAnalyzerAgent
+
+parsed = {}
+
+try:
     analyzer = ResumeAnalyzerAgent()
     parsed = await analyzer.parse(text_content)
+except Exception as e:
+    print("Resume parsing failed:", e)
+    parsed = {}
 
     resume = Resume(
         user_id=user.id, filename=file.filename, file_path=file_path,

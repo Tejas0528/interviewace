@@ -15,7 +15,7 @@ class BaseAgent:
                 try:
                     from langchain_google_genai import ChatGoogleGenerativeAI
                     self._llm = ChatGoogleGenerativeAI(
-                        model="gemini-2.5-flash",
+                        model="gemini-1.5-flash",
                         google_api_key=settings.GOOGLE_API_KEY.strip(),
                         temperature=0.7,
                     )
@@ -35,7 +35,17 @@ class BaseAgent:
                 SystemMessage(content=system_prompt),
                 HumanMessage(content=user_message),
             ]
-            response = await llm.ainvoke(messages)
+            import asyncio
+
+try:
+    response = await asyncio.wait_for(
+        llm.ainvoke(messages),
+        timeout=15
+    )
+    return response.content
+except Exception as e:
+    print(f"[BaseAgent] LLM invoke error: {e}")
+    return "{}"
             return response.content
         except Exception as e:
             print(f"[BaseAgent] LLM invoke error: {e}")
