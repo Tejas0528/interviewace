@@ -53,16 +53,33 @@ class BaseAgent:
             print(f"[BaseAgent] LLM invoke error: {e}")
             return "{}"
 
-    def parse_json(self, text: str) -> dict:
-        match = re.search(r"```(?:json)?\s*([\s\S]*?)\s*```", text)
-        if match:
-            text = match.group(1)
+def parse_json(self, text: str) -> dict:
+    """
+    Robust JSON parser for Gemini responses.
+    """
 
-        match = re.search(r"(\{[\s\S]*\}|\[[\s\S]*\])", text)
-        if match:
-            text = match.group(1)
+    if not text:
+        return {}
 
+    text = text.strip()
+
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:json)?", "", text)
+        text = re.sub(r"```$", "", text)
+        text = text.strip()
+
+    try:
+        return json.loads(text)
+    except Exception:
+        pass
+
+    start = text.find("{")
+    end = text.rfind("}")
+
+    if start != -1 and end != -1:
         try:
-            return json.loads(text)
-        except json.JSONDecodeError:
-            return {}
+            return json.loads(text[start:end + 1])
+        except Exception:
+            pass
+
+    return {}
