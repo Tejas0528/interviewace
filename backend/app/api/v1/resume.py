@@ -85,43 +85,43 @@ async def upload_resume(
     await db.refresh(resume)
 
 
-# ===== ADD YOUR AUTO ANALYSIS CODE HERE =====
+    # ===== ADD YOUR AUTO ANALYSIS CODE HERE =====
 
     # Resume Score
     scorer = ResumeScorerAgent()
     score_data = await scorer.score(
-    resume.content or "",
-    resume.parsed_data
+        resume.content or "",
+        resume.parsed_data
 )
 
-# ATS Score
+    # ATS Score
     ats_agent = ATSAnalyzerAgent()
     ats_data = await ats_agent.analyze(
-    resume.content or "",
-    None
+        resume.content or "",
+        None
 )
 
     # Save ResumeScore
     score_record = ResumeScore(
-    resume_id=resume.id,
-    overall=score_data.get("overall", 50),
-    sections=score_data.get("sections", {}),
-    suggestions=score_data.get("suggestions", []),
+        resume_id=resume.id,
+        overall=score_data.get("overall", 50),
+        sections=score_data.get("sections", {}),
+        suggestions=score_data.get("suggestions", []),
 )
     db.add(score_record)
 
     # Save ATSReport
     ats_record = ATSReport(
-    resume_id=resume.id,
-    job_description=None,
-    score=ats_data.get("score", 50),
-    keyword_match=ats_data.get("keyword_match", 50),
-    formatting_score=ats_data.get("formatting_score", 50),
-    action_verbs_score=ats_data.get("action_verbs_score", 50),
-    readability_score=ats_data.get("readability_score", 50),
-    missing_keywords=ats_data.get("missing_keywords", []),
-    found_keywords=ats_data.get("found_keywords", []),
-    suggestions=ats_data.get("suggestions", []),
+        resume_id=resume.id,
+        job_description=None,
+        score=ats_data.get("score", 50),
+        keyword_match=ats_data.get("keyword_match", 50),
+        formatting_score=ats_data.get("formatting_score", 50),
+        action_verbs_score=ats_data.get("action_verbs_score", 50),
+        readability_score=ats_data.get("readability_score", 50),
+        missing_keywords=ats_data.get("missing_keywords", []),
+        found_keywords=ats_data.get("found_keywords", []),
+        suggestions=ats_data.get("suggestions", []),
 )
     db.add(ats_record)
 
